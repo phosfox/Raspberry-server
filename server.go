@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -40,5 +41,16 @@ func main() {
 	var s server
 	db := GetDB()
 	s.db = db
+
+	rows := SelectAllIps(db)
+	var id int
+	var ip string
+	var timestamp time.Time
+
+	for rows.Next() {
+		rows.Scan(&id, &ip, &timestamp)
+		fmt.Printf("Id:%d IP:%s Timestamp:%s\n", id, ip, timestamp.Local())
+	}
+
 	s.start()
 }

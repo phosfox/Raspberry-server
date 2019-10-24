@@ -39,18 +39,5 @@ func GetDB() *sql.DB {
 
 	createTable(db, "CREATE TABLE IF NOT EXISTS raspberrypis (id INTEGER PRIMARY KEY, ip TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)")
 
-	InsertIP(db, "9.9.9.9")
-
-	rows := SelectAllIps(db)
-
-	var id int
-	var ip string
-	var timestamp time.Time
-
-	for rows.Next() {
-		rows.Scan(&id, &ip, &timestamp)
-		fmt.Printf("Id:%d IP:%s Timestamp:%s\n", id, ip, timestamp.Local())
-	}
-
 	return db
 }
