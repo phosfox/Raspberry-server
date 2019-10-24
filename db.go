@@ -2,8 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
-	"time"
 )
 
 func checkErr(err error) {
@@ -26,7 +24,7 @@ func createTable(db *sql.DB, s string) {
 	stmt.Exec()
 }
 
-func SelectAllIps(db *sql.DB) *sql.Rows{
+func SelectAllIps(db *sql.DB) *sql.Rows {
 	rows, err := db.Query("SELECT id, ip, timestamp FROM raspberrypis")
 	checkErr(err)
 

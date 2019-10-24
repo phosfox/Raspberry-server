@@ -10,7 +10,7 @@ import (
 )
 
 type server struct {
-	db  *sql.DB
+	db *sql.DB
 }
 
 func (s *server) ipHandle(w http.ResponseWriter, req *http.Request) {
