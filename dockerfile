@@ -2,11 +2,11 @@ FROM golang
 
 WORKDIR /go/src/app
 
+RUN go get github.com/mattn/go-sqlite3
+
 COPY . /go/src/app
 
-RUN cd /go/src/app
-RUN go get
-RUN go build -o server
-RUN pwd && ls
+RUN go build -o server .
 
-CMD ["sh", "/go/src/app/server"]
+CMD ["./server"]
+

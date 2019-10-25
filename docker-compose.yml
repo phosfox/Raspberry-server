@@ -6,7 +6,5 @@ services:
       - "8090:8090"
     links:
       - db
-    volumes:
-      - .:/go/src/app
   db:
     image: sstc/sqlite3:latest
