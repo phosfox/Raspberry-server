@@ -16,9 +16,9 @@ type server struct {
 }
 
 type dbrow struct {
-	id        int    `json:"id"`
-	ip        string `json:"ip"`
-	timestamp string `json:"timestamp"`
+	ID        int    `json:"ID"`
+	IP        string `json:"IP"`
+	Timestamp string `json:"Timestamp"`
 }
 
 type dbrows []dbrow
@@ -45,7 +45,7 @@ func (s *server) rootHandle(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 	case "GET":
 		rows := SelectAllIps(s.db)
-		ips := dbrows{dbrow{99, "255.255.255.255", "24:24"}}
+		var ips dbrows
 
 		for rows.Next() {
 			var (
@@ -58,6 +58,7 @@ func (s *server) rootHandle(w http.ResponseWriter, req *http.Request) {
 			}
 			ips = append(ips, dbrow{id, ip, timestamp.Local().String()})
 		}
+
 		mIps, err := json.Marshal(ips)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

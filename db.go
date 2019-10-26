@@ -25,7 +25,7 @@ func createTable(db *sql.DB, s string) {
 }
 
 func SelectAllIps(db *sql.DB) *sql.Rows {
-	rows, err := db.Query("SELECT id, ip, timestamp FROM raspberrypis")
+	rows, err := db.Query("SELECT id, ip, timestamp FROM raspberrypis ORDER BY timestamp DESC")
 	checkErr(err)
 
 	return rows
