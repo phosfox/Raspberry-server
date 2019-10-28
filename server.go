@@ -62,7 +62,7 @@ func (s *server) ipHandle(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (s *server) rootHandle(w http.ResponseWriter, req *http.Request) {
+func (s *server) allIpsHandle(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 	case "GET":
 		rows := SelectAllIps(s.db)
@@ -94,8 +94,10 @@ func (s *server) rootHandle(w http.ResponseWriter, req *http.Request) {
 }
 
 func (s *server) start() {
-	http.HandleFunc("/", s.rootHandle)
-	http.HandleFunc("/ip", s.ipHandle)
+	fs := http.FileServer(http.Dir("frontend/dist/"))
+	http.Handle("/", http.StripPrefix("/", fs))
+	http.HandleFunc("api/ips", s.allIpsHandle)
+	http.HandleFunc("api/ip", s.ipHandle)
 
 	http.ListenAndServe(":8090", nil)
 }
