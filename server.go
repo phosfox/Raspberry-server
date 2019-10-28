@@ -55,7 +55,7 @@ func (s *server) ipHandle(w http.ResponseWriter, req *http.Request) {
 
 			fmt.Fprintf(w, "Added IP: %s Name: %s\n", ip, name)
 		default:
-			fmt.Fprintf(w, "Allowed content-type: application/x-www-form-urlencoded, application/json\n")	
+			fmt.Fprintf(w, "Allowed content-type: application/x-www-form-urlencoded, application/json\n")
 		}
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
