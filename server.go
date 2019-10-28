@@ -18,7 +18,7 @@ type server struct {
 type dbrow struct {
 	ID        int    `json:"ID"`
 	IP        string `json:"IP"`
-	Name      string `json:Name`
+	Name      string `json:"Name"`
 	Timestamp string `json:"Timestamp"`
 }
 
@@ -27,17 +27,36 @@ type dbrows []dbrow
 func (s *server) ipHandle(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 	case "POST":
-		if err := req.ParseForm(); err != nil {
-			fmt.Fprintf(w, "Parseform() err: %v", err)
-			return
+		switch req.Header.Get("content-type") {
+		case "application/json":
+			var obj struct {
+				IP   string `json:"IP"`
+				Name string `json:"Name"`
+			}
+			err := json.NewDecoder(req.Body).Decode(&obj)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			InsertIP(s.db, obj.IP, obj.Name)
+
+			fmt.Fprintf(w, "Added IP: %s Name: %s\n", obj.IP, obj.Name)
+		case "application/x-www-form-urlencoded":
+			if err := req.ParseForm(); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			ip := req.FormValue("ip")
+			name := req.FormValue("name")
+
+			InsertIP(s.db, ip, name)
+
+			fmt.Fprintf(w, "Added IP: %s Name: %s\n", ip, name)
+		default:
+			fmt.Fprintf(w, "Allowed content-type: application/x-www-form-urlencoded, application/json\n")	
 		}
-
-		ip := req.FormValue("ip")
-		name := req.FormValue("name")
-
-		InsertIP(s.db, ip, name)
-
-		fmt.Fprintf(w, "Added IP: %s Name: %s\n", ip, name)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
