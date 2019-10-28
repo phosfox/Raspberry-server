@@ -39,7 +39,7 @@ func (s *server) ipHandle(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Fprintf(w, "Added IP: %s Name: %s\n", ip, name)
 	default:
-		fmt.Fprintf(w, "Not implemented yet\n")
+		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 
@@ -70,7 +70,7 @@ func (s *server) rootHandle(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.Write(mIps)
 	default:
-		fmt.Fprintf(w, "ROOT Default\n")
+		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 
