@@ -8,4 +8,4 @@ A `POST` request with urlencoded data to `localhost:8090/ip` will add a new ip t
 ## Example
 GET: `curl localhost:8090`
 
-POST: `curl -d "ip=1.1.1.1" -X POST localhost:8090/ip`
+POST: `curl -d "ip=1.1.1.1&name=test123" -X POST localhost:8090/ip`

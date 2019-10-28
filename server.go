@@ -18,6 +18,7 @@ type server struct {
 type dbrow struct {
 	ID        int    `json:"ID"`
 	IP        string `json:"IP"`
+	Name      string `json:Name`
 	Timestamp string `json:"Timestamp"`
 }
 
@@ -32,10 +33,11 @@ func (s *server) ipHandle(w http.ResponseWriter, req *http.Request) {
 		}
 
 		ip := req.FormValue("ip")
+		name := req.FormValue("name")
 
-		InsertIP(s.db, ip)
+		InsertIP(s.db, ip, name)
 
-		fmt.Fprintf(w, "IP: %s\n", ip)
+		fmt.Fprintf(w, "Added IP: %s Name: %s\n", ip, name)
 	default:
 		fmt.Fprintf(w, "Not implemented yet\n")
 	}
@@ -51,12 +53,13 @@ func (s *server) rootHandle(w http.ResponseWriter, req *http.Request) {
 			var (
 				id        int
 				ip        string
+				name      string
 				timestamp time.Time
 			)
-			if err := rows.Scan(&id, &ip, &timestamp); err != nil {
+			if err := rows.Scan(&id, &ip, &name, &timestamp); err != nil {
 				log.Fatal(err)
 			}
-			ips = append(ips, dbrow{id, ip, timestamp.Local().String()})
+			ips = append(ips, dbrow{id, ip, name, timestamp.Local().String()})
 		}
 
 		mIps, err := json.Marshal(ips)
